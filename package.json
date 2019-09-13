@@ -7,12 +7,12 @@
         "calendar"
     ],
     "author": {
-        "name": "twinssbc"
+        "name": "mirimadahmed"
     },
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/twinssbc/Ionic2-Calendar.git"
+        "url": "git+https://github.com/mirimadahmed/Ionic2-Calendar.git"
     },
     "scripts": {
         "build": "rm -rf dist && node_modules/.bin/ngc -p tsconfig.json",
