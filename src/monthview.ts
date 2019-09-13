@@ -32,7 +32,7 @@ import { IMonthViewDisplayEventTemplateContext } from "./calendar";
                         </tr>
                         </tbody>
                     </table>
-                    <table *ngIf="0!==currentViewIndex" class="table table-bordered table-fixed monthview-datetable">
+                    <table *ngIf="0!==currentViewIndex" class="table  table-fixed monthview-datetable">
                         <thead>
                         <tr class="text-center">
                             <th *ngFor="let dayHeader of views[0].dayHeaders">
@@ -52,7 +52,7 @@ import { IMonthViewDisplayEventTemplateContext } from "./calendar";
                     </table>
                 </ion-slide>
                 <ion-slide>
-                    <table *ngIf="1===currentViewIndex" class="table table-bordered table-fixed monthview-datetable">
+                    <table *ngIf="1===currentViewIndex" class="table  table-fixed monthview-datetable">
                         <thead>
                         <tr>
                             <th *ngFor="let dayHeader of views[1].dayHeaders">
@@ -71,7 +71,7 @@ import { IMonthViewDisplayEventTemplateContext } from "./calendar";
                         </tr>
                         </tbody>
                     </table>
-                    <table *ngIf="1!==currentViewIndex" class="table table-bordered table-fixed monthview-datetable">
+                    <table *ngIf="1!==currentViewIndex" class="table  table-fixed monthview-datetable">
                         <thead>
                         <tr class="text-center">
                             <th *ngFor="let dayHeader of views[1].dayHeaders">
@@ -91,7 +91,7 @@ import { IMonthViewDisplayEventTemplateContext } from "./calendar";
                     </table>
                 </ion-slide>
                 <ion-slide>
-                    <table *ngIf="2===currentViewIndex" class="table table-bordered table-fixed monthview-datetable">
+                    <table *ngIf="2===currentViewIndex" class="table  table-fixed monthview-datetable">
                         <thead>
                         <tr>
                             <th *ngFor="let dayHeader of views[2].dayHeaders">
@@ -110,7 +110,7 @@ import { IMonthViewDisplayEventTemplateContext } from "./calendar";
                         </tr>
                         </tbody>
                     </table>
-                    <table *ngIf="2!==currentViewIndex" class="table table-bordered table-fixed monthview-datetable">
+                    <table *ngIf="2!==currentViewIndex" class="table  table-fixed monthview-datetable">
                         <thead>
                         <tr class="text-center">
                             <th *ngFor="let dayHeader of views[2].dayHeaders">
@@ -187,8 +187,10 @@ import { IMonthViewDisplayEventTemplateContext } from "./calendar";
           background-color: #f9f9f9
         }
 
-        .monthview-primary-with-event {
-          background-color: #3a87ad;
+        .monthview-primary-with-event > .custom-monthview {
+          border-radius: 99px;
+          padding: 7px;
+          background-color: #2980b9;
           color: white;
         }
 
@@ -196,8 +198,10 @@ import { IMonthViewDisplayEventTemplateContext } from "./calendar";
           background-color: #f0f0f0;
         }
 
-        .monthview-selected {
-          background-color: #009900;
+        .monthview-selected > .custom-monthview {
+          border-radius: 99px;
+          padding: 7px;
+          background-color: #2980b9;
           color: white;
         }
 
@@ -215,8 +219,11 @@ import { IMonthViewDisplayEventTemplateContext } from "./calendar";
           text-align: center;
         }
 
-        .monthview-secondary-with-event {
-          background-color: #d9edf7;
+        .monthview-secondary-with-event > .custom-monthview {
+          border-radius: 99px;
+          padding: 7px;
+          background-color: #2980b9;
+          color: white;
         }
 
         ::-webkit-scrollbar,
@@ -226,54 +233,54 @@ import { IMonthViewDisplayEventTemplateContext } from "./calendar";
     `]
 })
 export class MonthViewComponent implements ICalendarComponent, OnInit, OnChanges {
-    @ViewChild('monthSlider') slider:IonSlides;
+    @ViewChild('monthSlider') slider: IonSlides;
 
-    @Input() monthviewDisplayEventTemplate:TemplateRef<IMonthViewDisplayEventTemplateContext>;
-    @Input() monthviewInactiveDisplayEventTemplate:TemplateRef<IMonthViewDisplayEventTemplateContext>;
-    @Input() monthviewEventDetailTemplate:TemplateRef<IMonthViewDisplayEventTemplateContext>;
+    @Input() monthviewDisplayEventTemplate: TemplateRef<IMonthViewDisplayEventTemplateContext>;
+    @Input() monthviewInactiveDisplayEventTemplate: TemplateRef<IMonthViewDisplayEventTemplateContext>;
+    @Input() monthviewEventDetailTemplate: TemplateRef<IMonthViewDisplayEventTemplateContext>;
 
-    @Input() formatDay:string;
-    @Input() formatDayHeader:string;
-    @Input() formatMonthTitle:string;
-    @Input() eventSource:IEvent[];
-    @Input() startingDayMonth:number;
-    @Input() showEventDetail:boolean;
-    @Input() noEventsLabel:string;
-    @Input() autoSelect:boolean = true;
-    @Input() markDisabled:(date:Date) => boolean;
-    @Input() locale:string;
-    @Input() dateFormatter:IDateFormatter;
-    @Input() dir:string = "";
-    @Input() lockSwipeToPrev:boolean;
-    @Input() lockSwipes:boolean;
-    @Input() sliderOptions:any;
+    @Input() formatDay: string;
+    @Input() formatDayHeader: string;
+    @Input() formatMonthTitle: string;
+    @Input() eventSource: IEvent[];
+    @Input() startingDayMonth: number;
+    @Input() showEventDetail: boolean;
+    @Input() noEventsLabel: string;
+    @Input() autoSelect: boolean = true;
+    @Input() markDisabled: (date: Date) => boolean;
+    @Input() locale: string;
+    @Input() dateFormatter: IDateFormatter;
+    @Input() dir: string = "";
+    @Input() lockSwipeToPrev: boolean;
+    @Input() lockSwipes: boolean;
+    @Input() sliderOptions: any;
 
     @Output() onRangeChanged = new EventEmitter<IRange>();
     @Output() onEventSelected = new EventEmitter<IEvent>();
     @Output() onTimeSelected = new EventEmitter<ITimeSelected>(true);
     @Output() onTitleChanged = new EventEmitter<string>(true);
 
-    public views:IMonthView[] = [];
+    public views: IMonthView[] = [];
     public currentViewIndex = 0;
-    public selectedDate:IMonthViewRow;
-    public range:IRange;
-    public mode:CalendarMode = 'month';
+    public selectedDate: IMonthViewRow;
+    public range: IRange;
+    public mode: CalendarMode = 'month';
     public direction = 0;
 
     private moveOnSelected = false;
     private inited = false;
     private callbackOnInit = true;
-    private currentDateChangedFromParentSubscription:Subscription;
-    private eventSourceChangedSubscription:Subscription;
-    private formatDayLabel:(date:Date) => string;
-    private formatDayHeaderLabel:(date:Date) => string;
-    private formatTitle:(date:Date) => string;
+    private currentDateChangedFromParentSubscription: Subscription;
+    private eventSourceChangedSubscription: Subscription;
+    private formatDayLabel: (date: Date) => string;
+    private formatDayHeaderLabel: (date: Date) => string;
+    private formatTitle: (date: Date) => string;
 
-    constructor(private calendarService:CalendarService) {
+    constructor(private calendarService: CalendarService) {
     }
 
     ngOnInit() {
-        if(!this.sliderOptions) {
+        if (!this.sliderOptions) {
             this.sliderOptions = {};
         }
         this.sliderOptions.loop = true;
@@ -282,7 +289,7 @@ export class MonthViewComponent implements ICalendarComponent, OnInit, OnChanges
             this.formatDayLabel = this.dateFormatter.formatMonthViewDay;
         } else {
             let dayLabelDatePipe = new DatePipe('en-US');
-            this.formatDayLabel = function (date:Date) {
+            this.formatDayLabel = function (date: Date) {
                 return dayLabelDatePipe.transform(date, this.formatDay);
             };
         }
@@ -291,7 +298,7 @@ export class MonthViewComponent implements ICalendarComponent, OnInit, OnChanges
             this.formatDayHeaderLabel = this.dateFormatter.formatMonthViewDayHeader;
         } else {
             let datePipe = new DatePipe(this.locale);
-            this.formatDayHeaderLabel = function (date:Date) {
+            this.formatDayHeaderLabel = function (date: Date) {
                 return datePipe.transform(date, this.formatDayHeader);
             };
         }
@@ -300,7 +307,7 @@ export class MonthViewComponent implements ICalendarComponent, OnInit, OnChanges
             this.formatTitle = this.dateFormatter.formatMonthViewTitle;
         } else {
             let datePipe = new DatePipe(this.locale);
-            this.formatTitle = function (date:Date) {
+            this.formatTitle = function (date: Date) {
                 return datePipe.transform(date, this.formatMonthTitle);
             };
         }
@@ -337,7 +344,7 @@ export class MonthViewComponent implements ICalendarComponent, OnInit, OnChanges
         }
     }
 
-    ngOnChanges(changes:SimpleChanges) {
+    ngOnChanges(changes: SimpleChanges) {
         if (!this.inited) return;
 
         let eventSourceChange = changes['eventSource'];
@@ -389,7 +396,7 @@ export class MonthViewComponent implements ICalendarComponent, OnInit, OnChanges
         });
     }
 
-    move(direction:number) {
+    move(direction: number) {
         if (direction === 0) return;
 
         this.direction = direction;
@@ -402,7 +409,7 @@ export class MonthViewComponent implements ICalendarComponent, OnInit, OnChanges
         this.moveOnSelected = false;
     }
 
-    createDateObject(date:Date):IMonthViewRow {
+    createDateObject(date: Date): IMonthViewRow {
         var disabled = false;
         if (this.markDisabled) {
             disabled = this.markDisabled(date);
@@ -417,7 +424,7 @@ export class MonthViewComponent implements ICalendarComponent, OnInit, OnChanges
         };
     }
 
-    static getDates(startDate:Date, n:number):Date[] {
+    static getDates(startDate: Date, n: number): Date[] {
         let dates = new Array(n),
             current = new Date(startDate.getTime()),
             i = 0;
@@ -429,20 +436,20 @@ export class MonthViewComponent implements ICalendarComponent, OnInit, OnChanges
         return dates;
     }
 
-    getViewData(startTime:Date):IMonthView {
+    getViewData(startTime: Date): IMonthView {
         let startDate = startTime,
             date = startDate.getDate(),
             month = (startDate.getMonth() + (date !== 1 ? 1 : 0)) % 12;
 
         let dates = MonthViewComponent.getDates(startDate, 42);
-        let days:IMonthViewRow[] = [];
+        let days: IMonthViewRow[] = [];
         for (let i = 0; i < 42; i++) {
             let dateObject = this.createDateObject(dates[i]);
             dateObject.secondary = dates[i].getMonth() !== month;
             days[i] = dateObject;
         }
 
-        let dayHeaders:string[] = [];
+        let dayHeaders: string[] = [];
         for (let i = 0; i < 7; i++) {
             dayHeaders.push(this.formatDayHeaderLabel(days[i].date));
         }
@@ -452,7 +459,7 @@ export class MonthViewComponent implements ICalendarComponent, OnInit, OnChanges
         };
     }
 
-    getHighlightClass(date:IMonthViewRow):string {
+    getHighlightClass(date: IMonthViewRow): string {
         let className = '';
 
         if (date.hasEvent) {
@@ -493,7 +500,7 @@ export class MonthViewComponent implements ICalendarComponent, OnInit, OnChanges
         return className;
     }
 
-    getRange(currentDate:Date):IRange {
+    getRange(currentDate: Date): IRange {
         let year = currentDate.getFullYear(),
             month = currentDate.getMonth(),
             firstDayOfMonth = new Date(year, month, 1),
@@ -538,8 +545,8 @@ export class MonthViewComponent implements ICalendarComponent, OnInit, OnChanges
             let event = eventSource[i],
                 eventStartTime = new Date(event.startTime.getTime()),
                 eventEndTime = new Date(event.endTime.getTime()),
-                st:Date,
-                et:Date;
+                st: Date,
+                et: Date;
 
             if (event.allDay) {
                 if (eventEndTime <= utcStartTime || eventStartTime >= utcEndTime) {
@@ -557,8 +564,8 @@ export class MonthViewComponent implements ICalendarComponent, OnInit, OnChanges
                 }
             }
 
-            let timeDiff:number;
-            let timeDifferenceStart:number;
+            let timeDiff: number;
+            let timeDifferenceStart: number;
             if (eventStartTime <= st) {
                 timeDifferenceStart = 0;
             } else {
@@ -569,7 +576,7 @@ export class MonthViewComponent implements ICalendarComponent, OnInit, OnChanges
                 timeDifferenceStart = timeDiff / oneDay;
             }
 
-            let timeDifferenceEnd:number;
+            let timeDifferenceEnd: number;
             if (eventEndTime >= et) {
                 timeDiff = et.getTime() - st.getTime();
                 if (!event.allDay) {
@@ -637,7 +644,7 @@ export class MonthViewComponent implements ICalendarComponent, OnInit, OnChanges
         this.calendarService.rangeChanged(this);
     }
 
-    getTitle():string {
+    getTitle(): string {
         let currentViewStartDate = this.range.startTime,
             date = currentViewStartDate.getDate(),
             month = (currentViewStartDate.getMonth() + (date !== 1 ? 1 : 0)) % 12,
@@ -646,7 +653,7 @@ export class MonthViewComponent implements ICalendarComponent, OnInit, OnChanges
         return this.formatTitle(headerDate);
     }
 
-    private compareEvent(event1:IEvent, event2:IEvent):number {
+    private compareEvent(event1: IEvent, event2: IEvent): number {
         if (event1.allDay) {
             return 1;
         } else if (event2.allDay) {
@@ -656,7 +663,7 @@ export class MonthViewComponent implements ICalendarComponent, OnInit, OnChanges
         }
     }
 
-    select(viewDate:IMonthViewRow) {
+    select(viewDate: IMonthViewRow) {
         if (!this.views) return;
 
         let selectedDate = viewDate.date,
@@ -699,10 +706,10 @@ export class MonthViewComponent implements ICalendarComponent, OnInit, OnChanges
             }
         }
 
-        this.onTimeSelected.emit({selectedTime: selectedDate, events: events, disabled: viewDate.disabled});
+        this.onTimeSelected.emit({ selectedTime: selectedDate, events: events, disabled: viewDate.disabled });
     }
 
-    slideView(direction:number) {
+    slideView(direction: number) {
         if (direction === 1) {
             this.slider.slideNext();
         } else if (direction === -1) {
@@ -710,7 +717,7 @@ export class MonthViewComponent implements ICalendarComponent, OnInit, OnChanges
         }
     }
 
-    updateCurrentView(currentViewStartDate:Date, view:IMonthView) {
+    updateCurrentView(currentViewStartDate: Date, view: IMonthView) {
         let currentCalendarDate = this.calendarService.currentDate,
             today = new Date(),
             oneDay = 86400000,
@@ -739,7 +746,7 @@ export class MonthViewComponent implements ICalendarComponent, OnInit, OnChanges
         }
     }
 
-    eventSelected(event:IEvent) {
+    eventSelected(event: IEvent) {
         this.onEventSelected.emit(event);
     }
 }
